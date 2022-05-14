@@ -10,6 +10,13 @@ def play_game(screen, game_panel, paddle):
 			if event.type == pygame.QUIT:
 				run = False
 
+			# if event.type == pygame.KEYDOWN:
+
+		# continuously move the paddle
+		keys = pygame.key.get_pressed()
+		if keys[pygame.K_UP]: paddle.up()
+		elif keys[pygame.K_DOWN]: paddle.down()
+
 		# drawing component	
 		screen.update_screen(game_panel, paddle)
 	pygame.quit()

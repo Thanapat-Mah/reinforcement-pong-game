@@ -28,4 +28,4 @@ class GamePanel:
 				block_y = y
 
 		# draw paddle
-		paddle.draw(screen.get_display(), [x, y])
+		paddle.draw(screen.get_display(), [x, y], self.__panel_size)
