@@ -24,14 +24,31 @@ class GamePanel:
 
 	def get_inner_position(self, side):
 		if side == 'left':
-			position = (self.__block_size, self.__rect.centery-self.__rect.top)
+			position = (self.__rect.left+self.__block_size, self.__rect.centery)
 		elif side == 'right':
-			position = (self.__rect.width-self.__block_size, self.__rect.centery - self.__rect.top)
+			position = (self.__rect.right-self.__block_size, self.__rect.centery)
 		elif side == 'center':
-			position = (int(self.__rect.width/2), int(self.__rect.height/2))
+			position = self.__rect.center
+		elif side =='center_block':
+			block_col = int((self.__rect.width/2)/self.__block_size)
+			block_row = int((self.__rect.height/2)/self.__block_size)
+			x = self.__rect.left + (block_col * self.__block_size) + int(self.__block_size/2)
+			y = self.__rect.top + (block_row * self.__block_size) + int(self.__block_size/2)
+			position = (x, y)
 		else:
 			position = self.__rect.center
 		return position
+
+	def check_collision(self, ball):
+		collide_side = False
+		# check if ball colide top side wall
+		if ball.get_position('top') <= self.__rect.top: collide_side = 'top'
+		elif ball.get_position('left') <= self.__rect.left: collide_side = 'left'
+		elif ball.get_position('right') >= self.__rect.right: collide_side = 'right'
+		elif ball.get_position('bottom') >= self.__rect.bottom: collide_side = 'bottom'
+		
+		if collide_side:
+			ball.change_direction(collide_side)
 
 	def draw(self, display):
 		# draw background

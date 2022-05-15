@@ -30,6 +30,10 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball):
 		elif action_limit > 0:
 			action_limit += 1
 
+		# update position of ball
+		ball.update_position()
+		game_panel.check_collision(ball)
+
 		# drawing component	
 		screen.update_screen(game_panel, left_paddle, right_paddle, ball)
 	pygame.quit()
@@ -39,7 +43,7 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball):
 if __name__ == '__main__':
 	pygame.init()
 	screen = Screen(fullscreen=False)
-	game_panel = GamePanel(grid_enable=False)
+	game_panel = GamePanel(grid_enable=True)
 	game_panel.set_center(screen.get_center())
 	left_paddle_position = game_panel.get_inner_position(side='left')
 	left_paddle = Paddle(game_panel.get_rect(), move_size=game_panel.get_block_size())
@@ -48,7 +52,7 @@ if __name__ == '__main__':
 	right_paddle = Paddle(game_panel.get_rect(), move_size=game_panel.get_block_size())
 	right_paddle.set_center(right_paddle_position)
 	ball = Ball(game_panel.get_rect())
-	center_panel_position = game_panel.get_inner_position(side='center')
+	center_panel_position = game_panel.get_inner_position(side='center_block')
 	ball.set_center(center_panel_position)
 
 	play_game(screen, game_panel, left_paddle, right_paddle, ball)

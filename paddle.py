@@ -21,12 +21,10 @@ class Paddle:
 
 	def justity_position(self):
 		# make the paddle don't go out the parent area
-		if self.__rect.top < 0:
-			self.__rect.top = 0
-		elif self.__rect.bottom > (self.__parent_rect.bottom-self.__parent_rect.top):
-			self.__rect.bottom = (self.__parent_rect.bottom-self.__parent_rect.top)
+		if self.__rect.top <= self.__parent_rect.top:
+			self.__rect.top = self.__parent_rect.top
+		elif self.__rect.bottom >= self.__parent_rect.bottom:
+			self.__rect.bottom = self.__parent_rect.bottom
 
 	def draw(self, display):
-		x = self.__rect.left+self.__parent_rect.left
-		y = self.__rect.top+self.__parent_rect.top
-		pygame.draw.rect(display, self.__color,(x, y, *self.__rect.size))
+		pygame.draw.rect(display, self.__color, self.__rect)
