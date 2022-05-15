@@ -16,9 +16,6 @@ class Screen:
 	def get_size(self):
 		return self.__size
 
-	def get_display(self):
-		return self.__display
-
 	# getter for virtual attribute
 	def get_center(self):
 		return (int(self.__size[0]/2), int(self.__size[1]/2))
@@ -26,8 +23,10 @@ class Screen:
 	def refresh_background(self):
 		self.__display.fill(self.__background_color)
 
-	def update_screen(self, game_panel, left_paddle):
+	def update_screen(self, game_panel, left_paddle, right_paddle, ball):
 		self.refresh_background()
-		game_panel.draw(self)
+		game_panel.draw(self.__display)
 		left_paddle.draw(self.__display)
+		right_paddle.draw(self.__display)
+		ball.draw(self.__display)
 		pygame.display.update()
