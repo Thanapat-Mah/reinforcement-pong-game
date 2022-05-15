@@ -2,7 +2,7 @@ import pygame
 
 class GamePanel:
 	def __init__(self, rect=[0, 0, 800, 500], block_size=20, background_color=(40, 40, 40), 
-		grid_color=(120, 120, 120), grid_enable=True):
+		grid_color=(50, 50, 50), grid_enable=True):
 		self.__rect = pygame.Rect(*rect)
 		self.__block_size = block_size
 		self.__block_count = [int(rect[2]/block_size), int(rect[3]/block_size)]
@@ -24,9 +24,9 @@ class GamePanel:
 
 	def get_inner_position(self, side):
 		if side == 'left':
-			position = (self.__rect.left+self.__block_size, self.__rect.centery)
+			position = (self.__rect.left+3*self.__block_size, self.__rect.centery)
 		elif side == 'right':
-			position = (self.__rect.right-self.__block_size, self.__rect.centery)
+			position = (self.__rect.right-3*self.__block_size, self.__rect.centery)
 		elif side == 'center':
 			position = self.__rect.center
 		elif side =='center_block':

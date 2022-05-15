@@ -25,6 +25,14 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball):
 				right_paddle.down()
 				action_limit = 1
 
+			# temporary make left paddle movable
+			if keys[pygame.K_w]:
+				left_paddle.up()
+				action_limit = 1
+			elif keys[pygame.K_s]:
+				left_paddle.down()
+				action_limit = 1
+
 		if action_limit == action_limit_speed:
 			action_limit = 0
 		elif action_limit > 0:

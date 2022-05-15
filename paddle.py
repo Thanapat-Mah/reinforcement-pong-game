@@ -1,7 +1,7 @@
 import pygame
 
 class Paddle:
-	def __init__(self, parent_rect, rect=[0, 0, 5, 60], color=(255, 255, 255), move_size=20):
+	def __init__(self, parent_rect, rect=[0, 0, 5, 60], color=(255, 255, 255), move_size=1):
 		self.__parent_rect = parent_rect
 		self.__rect = pygame.Rect(*rect)
 		self.__color = color
