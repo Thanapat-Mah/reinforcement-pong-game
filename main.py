@@ -31,8 +31,12 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball):
 			action_limit += 1
 
 		# update position of ball
-		ball.update_position()
 		game_panel.check_collision(ball)
+		if left_paddle.check_collision(ball):
+			ball.change_direction('left')
+		if right_paddle.check_collision(ball):
+			ball.change_direction('right')
+		ball.update_position()
 
 		# drawing component	
 		screen.update_screen(game_panel, left_paddle, right_paddle, ball)

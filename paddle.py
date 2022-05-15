@@ -26,5 +26,8 @@ class Paddle:
 		elif self.__rect.bottom >= self.__parent_rect.bottom:
 			self.__rect.bottom = self.__parent_rect.bottom
 
+	def check_collision(self, ball):
+		return self.__rect.colliderect(ball.get_rect())
+
 	def draw(self, display):
 		pygame.draw.rect(display, self.__color, self.__rect)

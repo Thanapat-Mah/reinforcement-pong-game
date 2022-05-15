@@ -8,6 +8,9 @@ class Ball:
 		self.__direction = [1, 1]
 
 	### getter --------------------------------------------------------------
+	def get_rect(self):
+		return self.__rect
+		
 	def get_position(self, side='top'):
 		if side == 'top': position = self.__rect.top
 		elif side == 'left': position = self.__rect.left
