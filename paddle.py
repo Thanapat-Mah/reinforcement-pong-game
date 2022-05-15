@@ -7,6 +7,10 @@ class Paddle:
 		self.__color = color
 		self.__move_size = move_size
 
+	### setter ----------------------------------------------------------------------------------
+	def set_center(self, center_point):
+		self.__rect.center = center_point
+
 	def up(self):
 		self.__rect.top -= self.__move_size
 		self.justity_position()
@@ -23,4 +27,6 @@ class Paddle:
 			self.__rect.bottom = (self.__parent_rect.bottom-self.__parent_rect.top)
 
 	def draw(self, display):
-		pygame.draw.rect(display, self.__color, (self.__rect.left+self.__parent_rect.left, self.__rect.top+self.__parent_rect.top, *self.__rect.size))
+		x = self.__rect.left+self.__parent_rect.left
+		y = self.__rect.top+self.__parent_rect.top
+		pygame.draw.rect(display, self.__color,(x, y, *self.__rect.size))
