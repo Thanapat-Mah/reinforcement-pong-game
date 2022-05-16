@@ -11,7 +11,7 @@ class GamePanel:
 		self.__background_color = background_color
 		self.__grid_color = grid_color
 		self.__grid_enable = grid_enable
-		position = (int(self.__rect.width/2), int(self.__rect.height/2))
+		self.__terminal_state = ['left']
 
 	### setter --------------------------------------------------------------------------------
 	def set_center(self, center_point):
@@ -73,30 +73,32 @@ class GamePanel:
 		return state_key
 
 	def check_collision(self, ball):
-		collide_side = False
+		collide_sides = []
 		# check if ball colide top side wall
-		if ball.get_position('top') <= self.__rect.top: collide_side = 'top'
-		elif ball.get_position('left') <= self.__rect.left: collide_side = 'left'
-		elif ball.get_position('right') >= self.__rect.right: collide_side = 'right'
-		elif ball.get_position('bottom') >= self.__rect.bottom: collide_side = 'bottom'
+		if ball.get_position('top') <= self.__rect.top: collide_sides.append('top')
+		if ball.get_position('left') <= self.__rect.left: collide_sides.append('left')
+		if ball.get_position('right') >= self.__rect.right: collide_sides.append('right')
+		if ball.get_position('bottom') >= self.__rect.bottom: collide_sides.append('bottom')
 		
-		# if collide with left wall, restart the ball
-		if collide_side == 'left':
-			# random new position of ball
-			ball_x = random.randint(self.__rect.left, self.__rect.right)
-			ball_y = random.randint(self.__rect.top, self.__rect.bottom)
-			# snap position to the grid
-			panel_x, panel_y = self.__rect.topleft
-			block_col = math.ceil((ball_x-panel_x)/self.__block_size)
-			block_row = math.ceil((ball_y-panel_y)/self.__block_size)
-			ball_x = self.__rect.left + block_col*self.__block_size
-			ball_y = self.__rect.top + block_row*self.__block_size
-
-			ball.reset_ball((ball_x, ball_y))
-		elif collide_side:
-			ball.change_direction(collide_side)
-
-		return collide_side
+		# if collide with terminal state (wall), restart the ball
+		if len(collide_sides) > 0:
+			for side in collide_sides:
+				if side in self.__terminal_state:
+					# random new position of ball
+					ball_x = random.randint(self.__rect.left, self.__rect.right)
+					ball_y = random.randint(self.__rect.top, self.__rect.bottom)
+					# snap position to the grid
+					panel_x, panel_y = self.__rect.topleft
+					block_col = math.ceil((ball_x-panel_x)/self.__block_size)
+					block_row = math.ceil((ball_y-panel_y)/self.__block_size)
+					ball_x = self.__rect.left + block_col*self.__block_size
+					ball_y = self.__rect.top + block_row*self.__block_size
+					ball.reset_ball((ball_x, ball_y))
+					return side
+				# else change direction
+				else:
+					ball.change_direction(side)
+		return None
 
 	def draw(self, display):
 		# draw background

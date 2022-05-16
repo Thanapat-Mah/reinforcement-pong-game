@@ -1,8 +1,9 @@
 import random
 
 class AI:
-	def __init__(self, paddle, init_state):
+	def __init__(self, paddle, terminal_side, init_state):
 		self.__paddle = paddle
+		self.__terminal_side = terminal_side
 		self.__actions = {'up': -0.001, 'down': -0.001, 'stay': -0.0005}
 		self.__q_table = dict()
 		self.init_util(init_state)
@@ -49,10 +50,9 @@ class AI:
 		self.__paddle.perform(best_action)
 
 		self.__memory = {'state': current_state, 'action': best_action}
-		return self.__actions[best_action]
 
 	# update utility function
-	def learn(self, action_reward, state_utility, new_state):
+	def learn(self, panel_collide_side, paddle_collide, new_state, ball_position_in_danger):
 		if new_state not in self.__q_table:
 			self.init_util(new_state)
 
@@ -61,7 +61,14 @@ class AI:
 		# self.__q_table[old_state][action] = action_reward + state_utility
 		
 		# reward from doing action
-		r = action_reward + state_utility
+		state_utility = 0
+		if panel_collide_side == self.__terminal_side:
+			state_utility = -1
+		elif paddle_collide:
+			state_utility = 1
+		elif ball_position_in_danger:
+			state_utility = -0.5
+		r = self.__actions[self.__memory['action']] + state_utility
 
 		# max possible Q value in new state
 		max_value = -1

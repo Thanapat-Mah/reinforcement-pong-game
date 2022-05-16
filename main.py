@@ -6,7 +6,7 @@ from ball import Ball
 from ai import AI
 from button import Button
 
-def play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle, grid_button):
+def play_game(screen, game_panel, left_paddle, ball, left_ai, grid_button):
 	run = True
 	clock_main = pygame.time.Clock()
 	fps = 30000000000	# overall fps limit
@@ -27,17 +27,17 @@ def play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle, grid
 		# continuously move the paddle
 		keys = pygame.key.get_pressed()
 		if paddle_action_count == 0:			
-			action_reward = left_ai.perform_action(current_state, best_util_ratio=1)
+			left_ai.perform_action(current_state, best_util_ratio=1)
 			paddle_action_count = 1
+			### temporary make right paddle movable
+			# if keys[pygame.K_UP]:
+			# 	right_paddle.up()
+			# 	paddle_action_count = 1
+			# elif keys[pygame.K_DOWN]:
+			# 	right_paddle.down()
+			# 	paddle_action_count = 1
 
-			### temporary make left paddle movable
-			if keys[pygame.K_UP]:
-				right_paddle.up()
-				paddle_action_count = 1
-			elif keys[pygame.K_DOWN]:
-				right_paddle.down()
-				paddle_action_count = 1
-
+		# limit the speed of paddle
 		if paddle_action_count >= paddle_action_limit:
 			paddle_action_count = 0
 		elif paddle_action_count > 0:
@@ -46,30 +46,19 @@ def play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle, grid
 		# update position of ball
 		panel_collide_side = game_panel.check_collision(ball)
 		left_paddle_collide = left_paddle.check_collision(ball)
-		right_paddle_collide = right_paddle.check_collision(ball)
 		if left_paddle_collide:
 			ball.change_direction('left')
-		elif right_paddle_collide:
-			ball.change_direction('right')
 		ball.update_position()
 
 		# learning from the previous action
-		state_utility = 0
-		if panel_collide_side == 'left':
-			state_utility = -1
-		elif left_paddle_collide:
-			state_utility = 1
-		elif ball.get_rect().left < left_paddle.get_left():
-			state_utility = -0.5
 		new_state = game_panel.get_state(ball, left_paddle)
-		left_ai.learn(action_reward, state_utility, new_state)
+		left_ball_position_in_danger = ball.get_rect().left < left_paddle.get_left()
+		left_ai.learn(panel_collide_side, left_paddle_collide, new_state, left_ball_position_in_danger)
 		current_state = new_state
 
-		if count > 100:
+		if count > 1000000:
 			fps = 10
-			# paddle_action_limit = 30
-			# ball.set_move_size(1)
-			screen.update_screen(game_panel, left_paddle, ball, right_paddle, grid_button)
+			screen.update_screen(game_panel, left_paddle, ball, grid_button)
 
 		# if (count%100000 == 0) and (count != 0): left_ai.get_states()
 		count += 1
@@ -94,12 +83,12 @@ if __name__ == '__main__':
 	ball = Ball(game_panel.get_rect(), move_size=game_panel.get_block_size())
 	ball.reset_ball(game_panel.get_inner_position(side='center'))
 
-	left_ai = AI(left_paddle, game_panel.get_state(ball, left_paddle))
+	left_ai = AI(left_paddle, 'left', game_panel.get_state(ball, left_paddle))
 
 	grid_button = Button(text='Enable grid')
 	grid_button.set_midtop(game_panel.get_inner_position(side='grid_button'))
 
-	play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle, grid_button)
+	play_game(screen, game_panel, left_paddle, ball, left_ai, grid_button)
 
 # q_table = {
 # 	'state1': {'up': 10, 'down': -10, 'stay': 0},
