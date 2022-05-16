@@ -10,6 +10,9 @@ class Paddle:
 	def get_center(self):
 		return self.__rect.center
 
+	def get_left(self):
+		return self.__rect.left
+
 	### setter ----------------------------------------------------------------------------------
 	def set_center(self, center_point):
 		self.__rect.center = center_point
@@ -21,6 +24,12 @@ class Paddle:
 	def down(self):
 		self.__rect.top += self.__move_size
 		self.justity_position()
+
+	def perform(self, action):
+		if action == 'up':
+			self.up()
+		elif action == 'down':
+			self.down()
 
 	def justity_position(self):
 		# make the paddle don't go out the parent area

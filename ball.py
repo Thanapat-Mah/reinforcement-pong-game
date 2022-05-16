@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Ball:
 	def __init__(self, parent_rect, rect=[0, 0, 5, 5], color=(255, 255, 255), move_size=1):
@@ -26,6 +27,12 @@ class Ball:
 	### setter --------------------------------------------------------------
 	def set_center(self, center_point):
 		self.__rect.center = center_point
+
+	def reset_ball(self, center_point):
+		self.__rect.center = center_point
+		direction_x = random.choice([self.__move_size, -self.__move_size])
+		direction_y = random.choice([self.__move_size, -self.__move_size])
+		self.__direction = [direction_x, direction_y]
 
 	def update_position(self):
 		self.__rect.topleft = (self.__rect.left+self.__direction[0], self.__rect.top+self.__direction[1])

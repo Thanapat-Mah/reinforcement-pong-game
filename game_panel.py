@@ -2,7 +2,7 @@ import pygame
 import math
 
 class GamePanel:
-	def __init__(self, rect=[0, 0, 800, 500], block_size=20, background_color=(40, 40, 40), 
+	def __init__(self, rect=[0, 0, 800, 500], block_size=50, background_color=(40, 40, 40), 
 		grid_color=(50, 50, 50), grid_enable=True):
 		self.__rect = pygame.Rect(*rect)
 		self.__block_size = block_size
@@ -62,7 +62,7 @@ class GamePanel:
 	def get_state(self, ball, paddle):
 		ball_position = self.get_block_position(ball.get_center())
 		paddle_position = self.get_block_position(paddle.get_center())
-		state_key = f'{ball_position[0]}-{ball_position[1]}_{paddle_position[1]}'
+		state_key = f'{ball_position[1]:02d}_{paddle_position[1]:02d}'
 		# print(state_key)
 		return state_key
 
@@ -74,8 +74,13 @@ class GamePanel:
 		elif ball.get_position('right') >= self.__rect.right: collide_side = 'right'
 		elif ball.get_position('bottom') >= self.__rect.bottom: collide_side = 'bottom'
 		
-		if collide_side:
+		# if collide with left wall, restart the ball
+		if collide_side == 'left':
+			ball.reset_ball(self.__rect.center)
+		elif collide_side:
 			ball.change_direction(collide_side)
+
+		return collide_side
 
 	def draw(self, display):
 		# draw background
