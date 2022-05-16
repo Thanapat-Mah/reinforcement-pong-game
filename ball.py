@@ -31,8 +31,13 @@ class Ball:
 	def set_move_size(self, new_move_size):
 		self.__move_size = new_move_size
 
-	def reset_ball(self, center_point):
-		self.__rect.center = center_point
+	def reset_ball(self, position=False):
+		if position:
+			self.__rect.center = position
+		# else:
+		# 	ball_x = random.randint(self.__parent_rect.left, self.__parent_rect.right)
+		# 	ball_y = random.randint(self.__parent_rect.top, self.__parent_rect.bottom)
+		# 	self.__rect.center = (ball_x, ball_y)
 		direction_x = random.choice([self.__move_size, -self.__move_size])
 		direction_y = random.choice([self.__move_size, -self.__move_size])
 		self.__direction = [direction_x, direction_y]

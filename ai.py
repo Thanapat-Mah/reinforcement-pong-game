@@ -3,7 +3,7 @@ import random
 class AI:
 	def __init__(self, paddle, init_state):
 		self.__paddle = paddle
-		self.__actions = {'up': -0.05, 'down': -0.05, 'stay': -0.01}
+		self.__actions = {'up': -0.001, 'down': -0.001, 'stay': -0.0005}
 		self.__q_table = dict()
 		self.init_util(init_state)
 		self.__memory = dict()
@@ -75,9 +75,3 @@ class AI:
 
 		# update Q value
 		self.__q_table[old_state][action] = current_q + self.__learning_coef * (r + bara - current_q)
-
-q_table = {
-	'00_06': {'up': -0.01, 'down': -0.51, 'stay': -0.55},
-	'00_01': {'up': -0.01, 'down': -0.51, 'stay': -0.05},
-	'00_03': {'up': -0.01, 'down': -0.51, 'stay': -0.55}
-}

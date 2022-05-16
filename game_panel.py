@@ -1,8 +1,9 @@
 import pygame
 import math
+import random
 
 class GamePanel:
-	def __init__(self, rect=[0, 0, 800, 500], block_size=50, background_color=(40, 40, 40), 
+	def __init__(self, rect=[0, 0, 800, 400], block_size=20, background_color=(40, 40, 40), 
 		grid_color=(50, 50, 50), grid_enable=True):
 		self.__rect = pygame.Rect(*rect)
 		self.__block_size = block_size
@@ -62,7 +63,7 @@ class GamePanel:
 	def get_state(self, ball, paddle):
 		ball_position = self.get_block_position(ball.get_center())
 		paddle_position = self.get_block_position(paddle.get_center())
-		state_key = f'{ball_position[1]:02d}_{paddle_position[1]:02d}'
+		state_key = f'{ball_position[0]:02d}-{ball_position[1]:02d}_{paddle_position[1]:02d}'
 		# print(state_key)
 		return state_key
 
@@ -76,7 +77,17 @@ class GamePanel:
 		
 		# if collide with left wall, restart the ball
 		if collide_side == 'left':
-			ball.reset_ball(self.__rect.center)
+			# random new position of ball
+			ball_x = random.randint(self.__rect.left, self.__rect.right)
+			ball_y = random.randint(self.__rect.top, self.__rect.bottom)
+			# snap position to the grid
+			panel_x, panel_y = self.__rect.topleft
+			block_col = math.ceil((ball_x-panel_x)/self.__block_size)
+			block_row = math.ceil((ball_y-panel_y)/self.__block_size)
+			ball_x = self.__rect.left + block_col*self.__block_size
+			ball_y = self.__rect.top + block_row*self.__block_size
+
+			ball.reset_ball((ball_x, ball_y))
 		elif collide_side:
 			ball.change_direction(collide_side)
 
