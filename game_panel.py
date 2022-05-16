@@ -55,13 +55,20 @@ class GamePanel:
 		pygame.draw.rect(display, self.__background_color, self.__rect)
 
 		# draw grid
-		block_x = self.__rect.left
-		block_y = self.__rect.top
-		if self.__grid_enable:
-			for col in range(self.__block_count[0]):
-				for row in range(self.__block_count[1]):
-					pygame.draw.rect(display, self.__grid_color,
-						(block_x, block_y, self.__block_size, self.__block_size), 1)
-					block_y += self.__block_size
-				block_x += self.__block_size
-				block_y = self.__rect.top
+		if not self.__grid_enable: return None
+		top = self.__rect.top
+		left = self.__rect.left
+		right = self.__rect.right
+		bottom = self.__rect.bottom
+
+		# draw vertical grid
+		for col in range(1, self.__block_count[0]):
+			pygame.draw.line(display, self.__grid_color,
+				(left+col*self.__block_size, top),
+				(left+col*self.__block_size, bottom))
+
+		# draw horizontal grid
+		for row in range(1, self.__block_count[1]):
+			pygame.draw.line(display, self.__grid_color,
+				(left, top+row*self.__block_size),
+				(right, top+row*self.__block_size))
