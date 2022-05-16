@@ -12,11 +12,13 @@ class Screen:
 		self.__display = pygame.display.set_mode((self.__size[0], self.__size[1]))
 		self.__inner_item = []
 
-	### getter for actual attributes -----------------------------------------------------------------
+	### getter ----------------------------------------------------------------------------------------
 	def get_size(self):
 		return self.__size
 
-	# getter for virtual attribute
+	def get_display(self):
+		return self.__display
+
 	def get_center(self):
 		return (int(self.__size[0]/2), int(self.__size[1]/2))
 

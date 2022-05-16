@@ -10,6 +10,9 @@ class Ball:
 	### getter --------------------------------------------------------------
 	def get_rect(self):
 		return self.__rect
+
+	def get_center(self):
+		return self.__rect.center
 		
 	def get_position(self, side='top'):
 		if side == 'top': position = self.__rect.top

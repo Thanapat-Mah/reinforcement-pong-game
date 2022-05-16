@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class GamePanel:
 	def __init__(self, rect=[0, 0, 800, 500], block_size=20, background_color=(40, 40, 40), 
@@ -38,6 +39,24 @@ class GamePanel:
 		else:
 			position = self.__rect.center
 		return position
+
+	# return block position (x, y), start from block 1
+	def get_block_position(self, object_position, display=None):
+		object_x, object_y = object_position
+		panel_x, panel_y = self.__rect.topleft
+		block_col = math.ceil((object_x-panel_x)/self.__block_size)
+		block_row = math.ceil((object_y-panel_y)/self.__block_size)
+		block_position = (block_col, block_row)
+
+		if display:
+			# hilight block of object
+			block_x = panel_x + (block_col-1)*self.__block_size
+			block_y = panel_y + (block_row-1)*self.__block_size
+			pygame.draw.rect(display, (120, 60, 60), (block_x, block_y, self.__block_size, self.__block_size), 2)
+			pygame.display.update()
+			print(block_position)
+
+		return block_position
 
 	def check_collision(self, ball):
 		collide_side = False

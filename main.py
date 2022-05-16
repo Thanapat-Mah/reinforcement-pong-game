@@ -7,7 +7,7 @@ from ball import Ball
 def play_game(screen, game_panel, left_paddle, right_paddle, ball):
 	run = True
 	clock_main = pygame.time.Clock()
-	fps = 300	# overall fps limit
+	fps = 30	# overall fps limit
 	paddle_action_limit = 0
 	paddle_action_limit_fps = 30	# fps for paddle movement
 	while run:
@@ -47,8 +47,10 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball):
 			ball.change_direction('right')
 		ball.update_position()
 
-		# drawing component	
+		# drawing component
 		screen.update_screen(game_panel, left_paddle, right_paddle, ball)
+		game_panel.get_block_position(ball.get_center(), screen.get_display())
+		game_panel.get_block_position(left_paddle.get_center(), screen.get_display())
 	pygame.quit()
 	quit()
 
@@ -69,3 +71,8 @@ if __name__ == '__main__':
 	ball.set_center(center_panel_position)
 
 	play_game(screen, game_panel, left_paddle, right_paddle, ball)
+
+# q_table = {
+# 	'state1': {'up': 10, 'down': -10, 'stay': 0},
+# 	'state2': {'up': 10, 'down': -10, 'stay': 0}
+# }

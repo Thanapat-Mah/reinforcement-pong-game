@@ -7,6 +7,9 @@ class Paddle:
 		self.__color = color
 		self.__move_size = move_size
 
+	def get_center(self):
+		return self.__rect.center
+
 	### setter ----------------------------------------------------------------------------------
 	def set_center(self, center_point):
 		self.__rect.center = center_point
