@@ -42,6 +42,10 @@ class GamePanel:
 			position = (x, y)
 		elif side == 'grid_button':
 			position = (self.__rect.midbottom[0], self.__rect.midbottom[1]+20)
+		elif side == 'render_button':
+			position = (self.__rect.bottomleft[0], self.__rect.bottomleft[1]+20)
+		elif side == 'train_button':
+			position = (self.__rect.midtop[0], self.__rect.midtop[1]-20)
 		else:
 			position = self.__rect.center
 		return position

@@ -21,6 +21,12 @@ class Button:
 	def set_midtop(self, midtop):
 		self.__rect.midtop = midtop
 
+	def set_midbottom(self, midbottom):
+		self.__rect.midbottom = midbottom
+
+	def set_topleft(self, topleft):
+		self.__rect.topleft = topleft
+
 	# draw button with text
 	def draw(self, display):
 		if self.__is_active:

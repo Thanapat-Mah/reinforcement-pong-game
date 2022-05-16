@@ -82,3 +82,8 @@ class AI:
 
 		# update Q value
 		self.__q_table[old_state][action] = current_q + self.__learning_coef * (r + bara - current_q)
+
+		terminate = False
+		if panel_collide_side or paddle_collide:
+			terminate = True
+		return terminate
