@@ -6,37 +6,38 @@ from ball import Ball
 
 def play_game(screen, game_panel, left_paddle, right_paddle, ball):
 	run = True
-	action_limit = 0
-	action_limit_speed = 20
+	clock_main = pygame.time.Clock()
+	fps = 300	# overall fps limit
+	paddle_action_limit = 0
+	paddle_action_limit_fps = 30	# fps for paddle movement
 	while run:
+		clock_main.tick(fps)
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				run = False
 
-			# if event.type == pygame.KEYDOWN:
-
 		# continuously move the paddle
 		keys = pygame.key.get_pressed()
-		if action_limit == 0:
+		if paddle_action_limit == 0:
 			if keys[pygame.K_UP]:
 				right_paddle.up()
-				action_limit = 1
+				paddle_action_limit = 1
 			elif keys[pygame.K_DOWN]:
 				right_paddle.down()
-				action_limit = 1
+				paddle_action_limit = 1
 
 			# temporary make left paddle movable
 			if keys[pygame.K_w]:
 				left_paddle.up()
-				action_limit = 1
+				paddle_action_limit = 1
 			elif keys[pygame.K_s]:
 				left_paddle.down()
-				action_limit = 1
+				paddle_action_limit = 1
 
-		if action_limit == action_limit_speed:
-			action_limit = 0
-		elif action_limit > 0:
-			action_limit += 1
+		if paddle_action_limit >= int(fps/paddle_action_limit_fps):
+			paddle_action_limit = 0
+		elif paddle_action_limit > 0:
+			paddle_action_limit += 1
 
 		# update position of ball
 		game_panel.check_collision(ball)
