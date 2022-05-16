@@ -28,6 +28,9 @@ class Ball:
 	def set_center(self, center_point):
 		self.__rect.center = center_point
 
+	def set_move_size(self, new_move_size):
+		self.__move_size = new_move_size
+
 	def reset_ball(self, center_point):
 		self.__rect.center = center_point
 		direction_x = random.choice([self.__move_size, -self.__move_size])

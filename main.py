@@ -12,6 +12,7 @@ def play_game(screen, game_panel, left_paddle, ball, left_ai):
 	paddle_action_count = 0
 	paddle_action_limit = 1
 	count = 0
+	current_state = game_panel.get_state(ball, left_paddle)
 	while run:
 		clock_main.tick(fps)
 		for event in pygame.event.get():
@@ -20,8 +21,7 @@ def play_game(screen, game_panel, left_paddle, ball, left_ai):
 
 		# continuously move the paddle
 		keys = pygame.key.get_pressed()
-		if paddle_action_count == 0:
-			current_state = game_panel.get_state(ball, left_paddle)
+		if paddle_action_count == 0:			
 			action_reward = left_ai.perform_action(current_state, best_util_ratio=1)
 			paddle_action_count = 1
 
@@ -53,20 +53,14 @@ def play_game(screen, game_panel, left_paddle, ball, left_ai):
 			state_utility = 1
 		elif ball.get_rect().left < left_paddle.get_left():
 			state_utility = -0.5
-		left_ai.learn(action_reward, state_utility)
-
-		# drawing component
-		# screen.update_screen(game_panel, left_paddle, ball)
+		new_state = game_panel.get_state(ball, left_paddle)
+		left_ai.learn(action_reward, state_utility, new_state)
+		current_state = new_state
 
 		if count > 1000000:
 			fps = 10
-			# paddle_action_limit = 3
 			screen.update_screen(game_panel, left_paddle, ball)
-		# if count >= 9900:
-		# 	left_ai.get_states()
-		# 	# screen.update_screen(game_panel, left_paddle, ball)
-		# if count >= 10000:
-		# 	count = 0
+
 		count += 1
 	pygame.quit()
 	quit()
@@ -77,7 +71,7 @@ if __name__ == '__main__':
 
 	screen = Screen(fullscreen=False)
 
-	game_panel = GamePanel(grid_enable=True)
+	game_panel = GamePanel(grid_enable=False)
 	game_panel.set_center(screen.get_center())
 
 	left_paddle = Paddle(game_panel.get_rect(), rect=[0, 0, 5, 100], move_size=game_panel.get_block_size())
