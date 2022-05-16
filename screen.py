@@ -25,10 +25,11 @@ class Screen:
 	def refresh_background(self):
 		self.__display.fill(self.__background_color)
 
-	def update_screen(self, game_panel, left_paddle, ball, right_paddle):
+	def update_screen(self, game_panel, left_paddle, ball, right_paddle, grid_button):
 		self.refresh_background()
 		game_panel.draw(self.__display)
 		left_paddle.draw(self.__display)
 		ball.draw(self.__display)
 		right_paddle.draw(self.__display)
+		grid_button.draw(self.__display)
 		pygame.display.update()

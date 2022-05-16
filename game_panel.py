@@ -17,6 +17,9 @@ class GamePanel:
 	def set_center(self, center_point):
 		self.__rect.center = center_point
 
+	def set_grid_enable(self, is_enable):
+		self.__grid_enable = is_enable
+
 	### getter --------------------------------------------------------------------------------
 	def get_rect(self):
 		return self.__rect
@@ -31,12 +34,14 @@ class GamePanel:
 			position = (self.__rect.right-3*self.__block_size, self.__rect.centery)
 		elif side == 'center':
 			position = self.__rect.center
-		elif side =='center_block':
+		elif side == 'center_block':
 			block_col = int((self.__rect.width/2)/self.__block_size)
 			block_row = int((self.__rect.height/2)/self.__block_size)
 			x = self.__rect.left + (block_col * self.__block_size) + int(self.__block_size/2)
 			y = self.__rect.top + (block_row * self.__block_size) + int(self.__block_size/2)
 			position = (x, y)
+		elif side == 'grid_button':
+			position = (self.__rect.midbottom[0], self.__rect.midbottom[1]+20)
 		else:
 			position = self.__rect.center
 		return position

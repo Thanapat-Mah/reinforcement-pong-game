@@ -4,8 +4,9 @@ from game_panel import GamePanel
 from paddle import Paddle
 from ball import Ball
 from ai import AI
+from button import Button
 
-def play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle):
+def play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle, grid_button):
 	run = True
 	clock_main = pygame.time.Clock()
 	fps = 30000000000	# overall fps limit
@@ -18,6 +19,10 @@ def play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				run = False
+
+			if grid_button.check_click(event):
+				grid_enable = grid_button.get_is_active()
+				game_panel.set_grid_enable(grid_enable)
 
 		# continuously move the paddle
 		keys = pygame.key.get_pressed()
@@ -60,14 +65,13 @@ def play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle):
 		left_ai.learn(action_reward, state_utility, new_state)
 		current_state = new_state
 
-		if count > 1000000:
+		if count > 100:
 			fps = 10
 			# paddle_action_limit = 30
 			# ball.set_move_size(1)
-			screen.update_screen(game_panel, left_paddle, ball, right_paddle)
+			screen.update_screen(game_panel, left_paddle, ball, right_paddle, grid_button)
 
-		if (count%100000 == 0) and (count != 0):
-			left_ai.get_states()
+		# if (count%100000 == 0) and (count != 0): left_ai.get_states()
 		count += 1
 	pygame.quit()
 	quit()
@@ -92,7 +96,10 @@ if __name__ == '__main__':
 
 	left_ai = AI(left_paddle, game_panel.get_state(ball, left_paddle))
 
-	play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle)
+	grid_button = Button(text='Enable grid')
+	grid_button.set_midtop(game_panel.get_inner_position(side='grid_button'))
+
+	play_game(screen, game_panel, left_paddle, ball, left_ai, right_paddle, grid_button)
 
 # q_table = {
 # 	'state1': {'up': 10, 'down': -10, 'stay': 0},
