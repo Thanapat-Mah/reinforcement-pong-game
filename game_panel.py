@@ -58,6 +58,14 @@ class GamePanel:
 
 		return block_position
 
+	# return current state of the game (position of AI paddle and ball)
+	def get_state(self, ball, paddle):
+		ball_position = self.get_block_position(ball.get_center())
+		paddle_position = self.get_block_position(paddle.get_center())
+		state_key = f'{ball_position[0]}-{ball_position[1]}_{paddle_position[1]}'
+		# print(state_key)
+		return state_key
+
 	def check_collision(self, ball):
 		collide_side = False
 		# check if ball colide top side wall
