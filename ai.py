@@ -11,9 +11,6 @@ class AI:
 		self.__discount_factor = 0.8
 		self.__learn_count = 0
 
-
-
-
 	### getter --------------------------------------------------------------
 	def get_states(self):
 		states_count = len(self.__q_table)
@@ -23,14 +20,16 @@ class AI:
 		for i in range(1, 4):
 			print(state_sample[-i], self.__q_table[state_sample[-i]])
 
+	def set_values(self, alpha, gamma):
+		self.__learning_coef = alpha
+		self.__discount_factor = gamma
+
 	def init_util(self, state):
 		self.__q_table[state] = {action: 0 for action in self.__actions_cost}
 
 	def reset(self):
 		self.__q_table = dict()
 		self.__memory = dict()
-		self.__learning_coef = 0.8
-		self.__discount_factor = 0.8
 		self.__learn_count = 0
 
 	# select and perform action
@@ -84,13 +83,13 @@ class AI:
 		for key, value in self.__q_table[new_state].items():
 			if value > max_value:
 				max_value = value
-		bara = self.__discount_factor*max_value
+		new_q_after_discount = self.__discount_factor*max_value
 
 		# Q value of current state
 		current_q = self.__q_table[old_state][action]
 
 		# update Q value
-		self.__q_table[old_state][action] = current_q + self.__learning_coef * (r + bara - current_q)
+		self.__q_table[old_state][action] = current_q + self.__learning_coef * (r + new_q_after_discount - current_q)
 
 		if panel_collide_side or paddle_collide:
 			self.__learn_count += 1

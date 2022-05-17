@@ -56,6 +56,7 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 					game_panel.add_terminal('left')
 				else:
 					game_panel.remove_terminal('left')
+				left_ai.set_values(*left_setting.get_values())
 			elif right_setting.check_click(event, right_ai):
 				right_state = right_setting.get_state()
 				is_right_learn = right_setting.get_is_learn()
@@ -63,6 +64,7 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 					game_panel.add_terminal('right')
 				else:
 					game_panel.remove_terminal('right')
+				right_ai.set_values(*right_setting.get_values())
 
 		keys = pygame.key.get_pressed()
 		if paddle_action_count == 0:

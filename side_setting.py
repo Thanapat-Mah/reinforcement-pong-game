@@ -33,6 +33,9 @@ class SideSetting:
 	def get_is_learn(self):
 		return self.__ai_setting['Learn'].get_is_active()
 
+	def get_values(self):
+		return self.__value_adjustors['Alpha'].get_value(), self.__value_adjustors['Gamma'].get_value()
+
 	### setter ------------------------------------------------------------------
 	def set_midleft(self, midleft):
 		self.__rect.midleft = midleft
@@ -41,6 +44,10 @@ class SideSetting:
 	def set_midright(self, midright):
 		self.__rect.midright = midright
 		self.adjust_elements()
+
+	def set_values(self, alpha, gamma):
+		self.__value_adjustors['Alpha'] = alpha
+		self.__value_adjustors['Gamma'] = gamma
 
 	def adjust_elements(self):
 		button_x = self.__rect.left + int((self.__rect.width-150)/2)
@@ -78,6 +85,9 @@ class SideSetting:
 					elif setting == 'Reset':
 						ai.reset()
 						return True
+			for value_label, value_adjustor in self.__value_adjustors.items():
+				if value_adjustor.check_click(event):
+					return True
 
 
 	def draw(self, display):

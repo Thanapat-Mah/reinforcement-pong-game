@@ -3,7 +3,7 @@ import math
 import random
 
 class GamePanel:
-	def __init__(self, rect=[0, 0, 800, 400], block_size=20, background_color=(40, 40, 40), 
+	def __init__(self, rect=[0, 0, 800, 400], block_size=5, background_color=(40, 40, 40), 
 		grid_color=(50, 50, 50), grid_enable=True):
 		self.__rect = pygame.Rect(*rect)
 		self.__block_size = block_size
