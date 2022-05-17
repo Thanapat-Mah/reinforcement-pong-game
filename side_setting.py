@@ -11,6 +11,12 @@ class SideSetting:
 			'AI': Button(text='AI', rect=[0, 0, 150, 50], active_color=(180, 100, 200)),
 			'Player': Button(text='Player', rect=[0, 0, 150, 50], active_color=(180, 100, 200))
 		}
+		self.__ai_setting = {
+			'Learn': Button(text='Learn', rect=[0, 0, 150, 50], active_color=(100, 200, 100)),
+			'Reset': Button(text='Reset', text_color=(255, 100, 100), rect=[0, 0, 150, 50],
+				active_color=(100, 100, 100), passive_color=(100, 100, 100))
+		}
+		self.__ai_setting['Learn'].set_is_active(False)
 		self.__state = state
 		self.adjust_buttons()
 		self.justify_state()
@@ -18,6 +24,9 @@ class SideSetting:
 	### getter ------------------------------------------------------------------
 	def get_state(self):
 		return self.__state
+
+	def get_is_learn(self):
+		return self.__ai_setting['Learn'].get_is_active()
 
 	### setter ------------------------------------------------------------------
 	def set_midleft(self, midleft):
@@ -35,6 +44,10 @@ class SideSetting:
 		for data, button in self.__buttons.items():
 			button.set_topleft((button_x, button_y))
 			button_y += 60
+		button_y += 20
+		for setting, button in self.__ai_setting.items():
+			button.set_topleft((button_x, button_y))
+			button_y += 60
 
 	def justify_state(self):
 		for data, button in self.__buttons.items():
@@ -49,8 +62,14 @@ class SideSetting:
 				self.__state = data
 				self.justify_state()
 				return self.__state
+		if self.__state == 'AI':
+			for setting, button in self.__ai_setting.items():
+				return button.check_click(event)
 
 	def draw(self, display):
 		pygame.draw.rect(display, self.__background_color, self.__rect, border_radius=self.__border_radius)
 		for data, button in self.__buttons.items():
 			button.draw(display)
+		if self.__state == 'AI':
+			for setting, button in self.__ai_setting.items():
+				button.draw(display)

@@ -11,7 +11,7 @@ class GamePanel:
 		self.__background_color = background_color
 		self.__grid_color = grid_color
 		self.__grid_enable = grid_enable
-		self.__terminal_state = ['left', 'right']
+		self.__terminal_state = ['left']
 
 	### setter --------------------------------------------------------------------------------
 	def set_center(self, center_point):
@@ -27,6 +27,14 @@ class GamePanel:
 	def get_block_size(self):
 		return self.__block_size
 
+	def add_terminal(self, side):
+		if side not in self.__terminal_state:
+			self.__terminal_state.append(side)
+
+	def remove_terminal(self, side):
+		if side in self.__terminal_state:
+			self.__terminal_state.remove(side)
+
 	def get_inner_position(self, side):
 		if side == 'left':
 			position = (self.__rect.left+3*self.__block_size, self.__rect.centery)
@@ -40,11 +48,17 @@ class GamePanel:
 			x = self.__rect.left + (block_col * self.__block_size) + int(self.__block_size/2)
 			y = self.__rect.top + (block_row * self.__block_size) + int(self.__block_size/2)
 			position = (x, y)
+		elif side == 'center_grid':
+			block_col = int((self.__rect.width/2)/self.__block_size)
+			block_row = int((self.__rect.height/2)/self.__block_size)
+			x = self.__rect.left + block_col * self.__block_size
+			y = self.__rect.top + block_row * self.__block_size
+			position = (x, y)
 		elif side == 'grid_button':
 			position = (self.__rect.midbottom[0], self.__rect.midbottom[1]+20)
 		elif side == 'render_button':
 			position = (self.__rect.bottomleft[0], self.__rect.bottomleft[1]+20)
-		elif side == 'train_button':
+		elif side == 'fast_button':
 			position = (self.__rect.midtop[0], self.__rect.midtop[1]-20)
 		elif side == 'left_setting':
 			position = (self.__rect.midleft[0]-20, self.__rect.midleft[1])
@@ -92,16 +106,21 @@ class GamePanel:
 		if len(collide_sides) > 0:
 			for side in collide_sides:
 				if side in self.__terminal_state:
-					# random new position of ball
-					ball_x = random.randint(self.__rect.left, self.__rect.right)
-					ball_y = random.randint(self.__rect.top, self.__rect.bottom)
-					# snap position to the grid
-					panel_x, panel_y = self.__rect.topleft
-					block_col = math.ceil((ball_x-panel_x)/self.__block_size)
-					block_row = math.ceil((ball_y-panel_y)/self.__block_size)
-					ball_x = self.__rect.left + block_col*self.__block_size
-					ball_y = self.__rect.top + block_row*self.__block_size
-					ball.reset_ball((ball_x, ball_y))
+					ball_position = (0, 0)
+					if ball.get_is_respawn_center():
+						ball_position = self.get_inner_position(side='center_grid')
+					else:
+						# random new position of ball
+						ball_x = random.randint(self.__rect.left, self.__rect.right)
+						ball_y = random.randint(self.__rect.top, self.__rect.bottom)
+						# snap position to the grid
+						panel_x, panel_y = self.__rect.topleft
+						block_col = math.ceil((ball_x-panel_x)/self.__block_size)
+						block_row = math.ceil((ball_y-panel_y)/self.__block_size)
+						ball_x = self.__rect.left + block_col*self.__block_size
+						ball_y = self.__rect.top + block_row*self.__block_size
+						ball_position = (ball_x, ball_y)
+					ball.reset_ball(ball_position)
 					return side
 				# else change direction
 				else:

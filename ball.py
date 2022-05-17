@@ -8,6 +8,7 @@ class Ball:
 		self.__color = color
 		self.__move_size = move_size
 		self.__direction = [move_size, move_size]
+		self.__is_respawn_center = False
 
 	### getter --------------------------------------------------------------
 	def get_rect(self):
@@ -24,6 +25,9 @@ class Ball:
 		else: position = 0
 		return position
 
+	def get_is_respawn_center(self):
+		return self.__is_respawn_center
+
 	### setter --------------------------------------------------------------
 	def set_center(self, center_point):
 		self.__rect.center = center_point
@@ -31,13 +35,12 @@ class Ball:
 	def set_move_size(self, new_move_size):
 		self.__move_size = new_move_size
 
-	def reset_ball(self, position=False):
+	def set_is_respawn_center(self, is_or_not):
+		self.__is_respawn_center = is_or_not
+
+	def reset_ball(self, position):
 		if position:
 			self.__rect.center = position
-		# else:
-		# 	ball_x = random.randint(self.__parent_rect.left, self.__parent_rect.right)
-		# 	ball_y = random.randint(self.__parent_rect.top, self.__parent_rect.bottom)
-		# 	self.__rect.center = (ball_x, ball_y)
 		direction_x = random.choice([self.__move_size, -self.__move_size])
 		direction_y = random.choice([self.__move_size, -self.__move_size])
 		self.__direction = [direction_x, direction_y]

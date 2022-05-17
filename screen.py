@@ -34,13 +34,15 @@ class Screen:
 		pygame.display.update()
 
 	def update_screen(self, game_panel, left_paddle, right_paddle, ball, grid_button, render_button, train_button, 
-		is_train, left_train_terminate_count, right_train_terminate_count, left_setting, right_setting):
+		is_fast, left_train_terminate_count, right_train_terminate_count, left_setting, right_setting):
 		self.refresh_background()
 		
 		if render_button.get_is_active():
 			game_panel.draw(self.__display)
-			left_paddle.draw(self.__display)
-			right_paddle.draw(self.__display)
+			if left_setting.get_state() != 'Wall':
+				left_paddle.draw(self.__display)
+			if right_setting.get_state() != 'Wall':
+				right_paddle.draw(self.__display)
 			ball.draw(self.__display)
 			grid_button.draw(self.__display)
 			train_button.draw(self.__display)
@@ -56,9 +58,9 @@ class Screen:
 			# right side
 			right_text_surface = font_consola.render(f'Train count: {right_train_terminate_count}', True, (255, 255, 255))
 			topright_panel = game_panel.get_rect().topright
-			padding_x = 10
+			padding_x = right_text_surface.get_size()[0] + 10
 			padding_y = right_text_surface.get_size()[1] + 20
-			self.__display.blit(left_text_surface, (topright_panel[0]-padding_x, topright_panel[1]-padding_y))
+			self.__display.blit(right_text_surface, (topright_panel[0]-padding_x, topright_panel[1]-padding_y))
 
 			left_setting.draw(self.__display)
 			right_setting.draw(self.__display)
