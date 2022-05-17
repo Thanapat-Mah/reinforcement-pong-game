@@ -8,7 +8,7 @@ from button import Button
 from side_setting import SideSetting
 
 def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, right_ai,
-	grid_button, render_button, fast_button,
+	grid_button, render_button, fast_button, close_button,
 	left_setting, right_setting):
 	run = True
 	clock_main = pygame.time.Clock()
@@ -17,7 +17,7 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 	paddle_action_limit = 1
 	is_fast = False
 	is_rendering = True
-	left_train_terminate_count = 0	
+	left_learn_terminate_count = 0	
 	left_current_state = game_panel.get_state(ball, left_paddle)
 	left_state = left_setting.get_state()
 	is_left_learn = left_setting.get_is_learn()
@@ -44,14 +44,16 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 				is_rendering = render_button.get_is_active()
 				if not is_rendering:
 					screen.disable_rendering(render_button)
-			elif left_setting.check_click(event):
+			elif close_button.check_click(event):
+				run = False
+			elif left_setting.check_click(event, left_ai):
 				left_state = left_setting.get_state()
 				is_left_learn = left_setting.get_is_learn()
 				if left_state != 'Wall':
 					game_panel.add_terminal('left')
 				else:
 					game_panel.remove_terminal('left')
-			elif right_setting.check_click(event):
+			elif right_setting.check_click(event, right_ai):
 				right_state = right_setting.get_state()
 				is_right_learn = right_setting.get_is_learn()
 				if right_state != 'Wall':
@@ -108,13 +110,13 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 		# learning from the previous action
 		if (left_state == 'AI') and is_left_learn:
 			left_ball_position_in_danger = ball.get_rect().left < left_paddle.get_left()
-			left_train_terminate_count = left_ai.learn(panel_collide_side, left_paddle_collide, left_new_state, left_ball_position_in_danger)
+			left_learn_terminate_count = left_ai.learn(panel_collide_side, left_paddle_collide, left_new_state, left_ball_position_in_danger)
 		if (right_state == 'AI') and is_right_learn:
 			right_ball_position_in_danger = ball.get_rect().right > right_paddle.get_right()
 			right_train_terminate_count = right_ai.learn(panel_collide_side, right_paddle_collide, right_new_state, right_ball_position_in_danger)
 		if is_rendering:
 			screen.update_screen(game_panel, left_paddle, right_paddle, ball, grid_button, render_button, fast_button, 
-				is_fast, left_train_terminate_count, right_train_terminate_count, left_setting, right_setting)
+				is_fast, left_learn_terminate_count, right_train_terminate_count, close_button, left_setting, right_setting)
 
 		# if (count%100000 == 0) and (count != 0): left_ai.get_states()
 	pygame.quit()
@@ -124,7 +126,7 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 if __name__ == '__main__':
 	pygame.init()
 
-	screen = Screen(fullscreen=False)
+	screen = Screen(fullscreen=True)
 
 	game_panel = GamePanel(grid_enable=True)
 	game_panel.set_center(screen.get_center())
@@ -138,8 +140,8 @@ if __name__ == '__main__':
 	ball = Ball(game_panel.get_rect(), move_size=game_panel.get_block_size())
 	ball.reset_ball(game_panel.get_inner_position(side='center'))
 
-	left_ai = AI(left_paddle, 'left', game_panel.get_state(ball, left_paddle))
-	right_ai = AI(right_paddle, 'right', game_panel.get_state(ball, right_paddle))
+	left_ai = AI(left_paddle, 'left')
+	right_ai = AI(right_paddle, 'right')
 
 	grid_button = Button(text='Enable grid', active_color=(100, 100, 200))
 	grid_button.set_midtop(game_panel.get_inner_position(side='grid_button'))
@@ -151,6 +153,9 @@ if __name__ == '__main__':
 	fast_button.set_is_active(False)
 	fast_button.set_midbottom(game_panel.get_inner_position(side='fast_button'))
 
+	close_button = Button(text='Close program', active_color=(200, 100, 100), passive_color=(200, 100, 100))
+	close_button.set_topright((screen.get_size()[0]-20, 20))
+
 	left_setting = SideSetting()
 	left_setting.set_midright(game_panel.get_inner_position(side='left_setting'))
 
@@ -159,7 +164,7 @@ if __name__ == '__main__':
 
 
 	play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, right_ai, 
-		grid_button, render_button, fast_button,
+		grid_button, render_button, fast_button, close_button,
 		left_setting, right_setting)
 
 # q_table = {

@@ -30,6 +30,9 @@ class Button:
 	def set_topleft(self, topleft):
 		self.__rect.topleft = topleft
 
+	def set_topright(self, topright):
+		self.__rect.topright = topright
+
 	# draw button with text
 	def draw(self, display):
 		if self.__is_active:

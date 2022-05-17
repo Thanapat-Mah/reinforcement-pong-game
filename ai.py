@@ -1,16 +1,15 @@
 import random
 
 class AI:
-	def __init__(self, paddle, terminal_side, init_state):
+	def __init__(self, paddle, terminal_side):
 		self.__paddle = paddle
 		self.__terminal_side = terminal_side
-		self.__actions = {'up': -0.001, 'down': -0.001, 'stay': -0.0005}
+		self.__actions_cost = {'up': -0.001, 'down': -0.001, 'stay': -0.0005}
 		self.__q_table = dict()
-		self.init_util(init_state)
 		self.__memory = dict()
 		self.__learning_coef = 0.8
 		self.__discount_factor = 0.8
-		self.__train_count = 0
+		self.__learn_count = 0
 
 
 
@@ -25,12 +24,14 @@ class AI:
 			print(state_sample[-i], self.__q_table[state_sample[-i]])
 
 	def init_util(self, state):
-		self.__q_table[state] = {action: 0 for action in self.__actions}
+		self.__q_table[state] = {action: 0 for action in self.__actions_cost}
 
 	def reset(self):
-		self.__train_count = 0
 		self.__q_table = dict()
 		self.__memory = dict()
+		self.__learning_coef = 0.8
+		self.__discount_factor = 0.8
+		self.__learn_count = 0
 
 	# select and perform action
 	# If best_util_ratio = 1, it always pick the best action
@@ -52,7 +53,7 @@ class AI:
 					best_action = random.choice([best_action, key])
 		# select random action
 		else:
-			best_action = random.choice([action for action in self.__actions])
+			best_action = random.choice([action for action in self.__actions_cost])
 
 		# perform action
 		self.__paddle.perform(best_action)
@@ -76,7 +77,7 @@ class AI:
 			state_utility = 1
 		elif ball_position_in_danger:
 			state_utility = -0.5
-		r = self.__actions[self.__memory['action']] + state_utility
+		r = self.__actions_cost[self.__memory['action']] + state_utility
 
 		# max possible Q value in new state
 		max_value = -1
@@ -92,5 +93,5 @@ class AI:
 		self.__q_table[old_state][action] = current_q + self.__learning_coef * (r + bara - current_q)
 
 		if panel_collide_side or paddle_collide:
-			self.__train_count += 1
-		return self.__train_count
+			self.__learn_count += 1
+		return self.__learn_count

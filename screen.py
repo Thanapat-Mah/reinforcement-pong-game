@@ -31,10 +31,11 @@ class Screen:
 	def disable_rendering(self, render_button):
 		self.refresh_background()
 		render_button.draw(self.__display)
+
 		pygame.display.update()
 
 	def update_screen(self, game_panel, left_paddle, right_paddle, ball, grid_button, render_button, train_button, 
-		is_fast, left_train_terminate_count, right_train_terminate_count, left_setting, right_setting):
+		is_fast, left_learn_terminate_count, right_learn_terminate_count, close_button, left_setting, right_setting):
 		self.refresh_background()
 		
 		if render_button.get_is_active():
@@ -47,16 +48,17 @@ class Screen:
 			grid_button.draw(self.__display)
 			train_button.draw(self.__display)
 			render_button.draw(self.__display)
+			close_button.draw(self.__display)
 
 			# display trian terminate count when in training
 			# left side
-			left_text_surface = font_consola.render(f'Train count: {left_train_terminate_count}', True, (255, 255, 255))
+			left_text_surface = font_consola.render(f'Learn count: {left_learn_terminate_count}', True, (255, 255, 255))
 			topleft_panel = game_panel.get_rect().topleft
 			padding_x = 10
 			padding_y = left_text_surface.get_size()[1] + 20
 			self.__display.blit(left_text_surface, (topleft_panel[0]+padding_x, topleft_panel[1]-padding_y))
 			# right side
-			right_text_surface = font_consola.render(f'Train count: {right_train_terminate_count}', True, (255, 255, 255))
+			right_text_surface = font_consola.render(f'Learn count: {right_learn_terminate_count}', True, (255, 255, 255))
 			topright_panel = game_panel.get_rect().topright
 			padding_x = right_text_surface.get_size()[0] + 10
 			padding_y = right_text_surface.get_size()[1] + 20

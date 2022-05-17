@@ -7,13 +7,13 @@ class SideSetting:
 		self.__border_radius = border_radius
 		self.__background_color = background_color
 		self.__buttons = {
-			'Wall': Button(text='Wall', rect=[0, 0, 150, 50], active_color=(180, 100, 200)),
-			'AI': Button(text='AI', rect=[0, 0, 150, 50], active_color=(180, 100, 200)),
-			'Player': Button(text='Player', rect=[0, 0, 150, 50], active_color=(180, 100, 200))
+			'Wall': Button(text='Wall', rect=[0, 0, 150, 40], active_color=(180, 100, 200)),
+			'AI': Button(text='AI', rect=[0, 0, 150, 40], active_color=(180, 100, 200)),
+			'Player': Button(text='Player', rect=[0, 0, 150, 40], active_color=(180, 100, 200))
 		}
 		self.__ai_setting = {
-			'Learn': Button(text='Learn', rect=[0, 0, 150, 50], active_color=(100, 200, 100)),
-			'Reset': Button(text='Reset', text_color=(255, 100, 100), rect=[0, 0, 150, 50],
+			'Learn': Button(text='Learn', rect=[0, 0, 150, 40], active_color=(100, 200, 100)),
+			'Reset': Button(text='Reset', text_color=(255, 100, 100), rect=[0, 0, 150, 40],
 				active_color=(100, 100, 100), passive_color=(100, 100, 100))
 		}
 		self.__ai_setting['Learn'].set_is_active(False)
@@ -43,11 +43,11 @@ class SideSetting:
 		button_y = self.__rect.top + 30
 		for data, button in self.__buttons.items():
 			button.set_topleft((button_x, button_y))
-			button_y += 60
-		button_y += 20
+			button_y += 50
+		button_y += 100
 		for setting, button in self.__ai_setting.items():
 			button.set_topleft((button_x, button_y))
-			button_y += 60
+			button_y += 50
 
 	def justify_state(self):
 		for data, button in self.__buttons.items():
@@ -56,7 +56,7 @@ class SideSetting:
 			else:
 				button.set_is_active(True)
 
-	def check_click(self, event):
+	def check_click(self, event, ai):
 		for data, button in self.__buttons.items():
 			if button.check_click(event):
 				self.__state = data
@@ -64,7 +64,13 @@ class SideSetting:
 				return self.__state
 		if self.__state == 'AI':
 			for setting, button in self.__ai_setting.items():
-				return button.check_click(event)
+				if button.check_click(event):
+					if setting == 'Learn':
+						return True
+					elif setting == 'Reset':
+						ai.reset()
+						return True
+
 
 	def draw(self, display):
 		pygame.draw.rect(display, self.__background_color, self.__rect, border_radius=self.__border_radius)
