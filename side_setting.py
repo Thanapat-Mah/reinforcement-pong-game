@@ -1,5 +1,6 @@
 import pygame
 from button import Button
+from value_adjustor import ValueAdjustor
 
 class SideSetting:
 	def __init__(self, rect=[0, 0, 200, 400], border_radius=20, background_color=(40, 40, 40), state='AI'):
@@ -11,6 +12,10 @@ class SideSetting:
 			'AI': Button(text='AI', rect=[0, 0, 150, 40], active_color=(180, 100, 200)),
 			'Player': Button(text='Player', rect=[0, 0, 150, 40], active_color=(180, 100, 200))
 		}
+		self.__value_adjustors = {
+			'Alpha': ValueAdjustor(value_label='α', rect=[0, 0, 150, 30]),
+			'Gamma': ValueAdjustor(value_label='γ', rect=[0, 0, 150, 30]),
+		}
 		self.__ai_setting = {
 			'Learn': Button(text='Learn', rect=[0, 0, 150, 40], active_color=(100, 200, 100)),
 			'Reset': Button(text='Reset', text_color=(255, 100, 100), rect=[0, 0, 150, 40],
@@ -18,7 +23,7 @@ class SideSetting:
 		}
 		self.__ai_setting['Learn'].set_is_active(False)
 		self.__state = state
-		self.adjust_buttons()
+		self.adjust_elements()
 		self.justify_state()
 
 	### getter ------------------------------------------------------------------
@@ -31,20 +36,23 @@ class SideSetting:
 	### setter ------------------------------------------------------------------
 	def set_midleft(self, midleft):
 		self.__rect.midleft = midleft
-		self.adjust_buttons()
+		self.adjust_elements()
 
 	def set_midright(self, midright):
 		self.__rect.midright = midright
-		self.adjust_buttons()
+		self.adjust_elements()
 
-
-	def adjust_buttons(self):
+	def adjust_elements(self):
 		button_x = self.__rect.left + int((self.__rect.width-150)/2)
 		button_y = self.__rect.top + 30
 		for data, button in self.__buttons.items():
 			button.set_topleft((button_x, button_y))
 			button_y += 50
-		button_y += 100
+		button_y += 10
+		for value_label, value_adjustor in self.__value_adjustors.items():
+			value_adjustor.set_topleft((button_x, button_y))
+			button_y += 40
+		button_y += 10
 		for setting, button in self.__ai_setting.items():
 			button.set_topleft((button_x, button_y))
 			button_y += 50
@@ -79,3 +87,5 @@ class SideSetting:
 		if self.__state == 'AI':
 			for setting, button in self.__ai_setting.items():
 				button.draw(display)
+			for value_label, value_adjustor in self.__value_adjustors.items():
+				value_adjustor.draw(display)
