@@ -34,7 +34,8 @@ class Screen:
 
 		pygame.display.update()
 
-	def update_screen(self, game_panel, left_paddle, right_paddle, ball, grid_button, render_button, train_button, 
+	def update_screen(self, game_panel, left_paddle, right_paddle, ball,
+		grid_button, render_button, random_ball_button, fast_button, 
 		is_fast, left_learn_terminate_count, right_learn_terminate_count, close_button, left_setting, right_setting):
 		self.refresh_background()
 		
@@ -46,7 +47,8 @@ class Screen:
 				right_paddle.draw(self.__display)
 			ball.draw(self.__display)
 			grid_button.draw(self.__display)
-			train_button.draw(self.__display)
+			random_ball_button.draw(self.__display)
+			fast_button.draw(self.__display)
 			render_button.draw(self.__display)
 			close_button.draw(self.__display)
 

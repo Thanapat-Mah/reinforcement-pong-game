@@ -58,6 +58,8 @@ class GamePanel:
 			position = (self.__rect.midbottom[0], self.__rect.midbottom[1]+20)
 		elif side == 'render_button':
 			position = (self.__rect.bottomleft[0], self.__rect.bottomleft[1]+20)
+		elif side == 'random_ball_button':
+			position = (self.__rect.bottomright[0], self.__rect.bottomright[1]+20)
 		elif side == 'fast_button':
 			position = (self.__rect.midtop[0], self.__rect.midtop[1]-20)
 		elif side == 'left_setting':

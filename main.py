@@ -8,7 +8,7 @@ from button import Button
 from side_setting import SideSetting
 
 def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, right_ai,
-	grid_button, render_button, fast_button, close_button,
+	grid_button, render_button, random_ball_button, fast_button, close_button,
 	left_setting, right_setting):
 	run = True
 	clock_main = pygame.time.Clock()
@@ -34,6 +34,9 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 			if grid_button.check_click(event):
 				grid_enable = grid_button.get_is_active()
 				game_panel.set_grid_enable(grid_enable)
+			elif random_ball_button.check_click(event):
+				is_random = random_ball_button.get_is_active()
+				ball.set_is_respawn_center(not is_random)
 			elif fast_button.check_click(event):
 				is_fast = fast_button.get_is_active()
 				if is_fast:
@@ -115,7 +118,8 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 			right_ball_position_in_danger = ball.get_rect().right > right_paddle.get_right()
 			right_train_terminate_count = right_ai.learn(panel_collide_side, right_paddle_collide, right_new_state, right_ball_position_in_danger)
 		if is_rendering:
-			screen.update_screen(game_panel, left_paddle, right_paddle, ball, grid_button, render_button, fast_button, 
+			screen.update_screen(game_panel, left_paddle, right_paddle, ball,
+				grid_button, render_button, random_ball_button, fast_button,
 				is_fast, left_learn_terminate_count, right_train_terminate_count, close_button, left_setting, right_setting)
 
 		# if (count%100000 == 0) and (count != 0): left_ai.get_states()
@@ -149,6 +153,9 @@ if __name__ == '__main__':
 	render_button = Button(text='Enable rendering', active_color=(100, 100, 200))
 	render_button.set_topleft(game_panel.get_inner_position(side='render_button'))
 
+	random_ball_button = Button(text='Random spawn ball', active_color=(100, 100, 200))
+	random_ball_button.set_topright(game_panel.get_inner_position(side='random_ball_button'))
+
 	fast_button = Button(text='Fast simulate', active_color=(100, 200, 100))
 	fast_button.set_is_active(False)
 	fast_button.set_midbottom(game_panel.get_inner_position(side='fast_button'))
@@ -164,7 +171,7 @@ if __name__ == '__main__':
 
 
 	play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, right_ai, 
-		grid_button, render_button, fast_button, close_button,
+		grid_button, render_button, random_ball_button, fast_button, close_button,
 		left_setting, right_setting)
 
 # q_table = {
