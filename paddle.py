@@ -7,11 +7,16 @@ class Paddle:
 		self.__color = color
 		self.__move_size = move_size
 
+	### getter ---------------------------------------------------------------------------------
+
 	def get_center(self):
 		return self.__rect.center
 
 	def get_left(self):
 		return self.__rect.left
+
+	def get_right(self):
+		return self.__rect.right
 
 	### setter ----------------------------------------------------------------------------------
 	def set_center(self, center_point):

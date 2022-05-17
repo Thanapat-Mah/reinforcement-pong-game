@@ -10,6 +10,10 @@ class AI:
 		self.__memory = dict()
 		self.__learning_coef = 0.8
 		self.__discount_factor = 0.8
+		self.__train_count = 0
+
+
+
 
 	### getter --------------------------------------------------------------
 	def get_states(self):
@@ -20,9 +24,13 @@ class AI:
 		for i in range(1, 4):
 			print(state_sample[-i], self.__q_table[state_sample[-i]])
 
-
 	def init_util(self, state):
 		self.__q_table[state] = {action: 0 for action in self.__actions}
+
+	def reset(self):
+		self.__train_count = 0
+		self.__q_table = dict()
+		self.__memory = dict()
 
 	# select and perform action
 	# If best_util_ratio = 1, it always pick the best action
@@ -83,7 +91,6 @@ class AI:
 		# update Q value
 		self.__q_table[old_state][action] = current_q + self.__learning_coef * (r + bara - current_q)
 
-		terminate = False
 		if panel_collide_side or paddle_collide:
-			terminate = True
-		return terminate
+			self.__train_count += 1
+		return self.__train_count

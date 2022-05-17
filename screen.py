@@ -33,22 +33,34 @@ class Screen:
 		render_button.draw(self.__display)
 		pygame.display.update()
 
-	def update_screen(self, game_panel, left_paddle, ball, grid_button, render_button, train_button, is_train, trian_terminate_count):
+	def update_screen(self, game_panel, left_paddle, right_paddle, ball, grid_button, render_button, train_button, 
+		is_train, left_train_terminate_count, right_train_terminate_count, left_setting, right_setting):
 		self.refresh_background()
 		
 		if render_button.get_is_active():
 			game_panel.draw(self.__display)
 			left_paddle.draw(self.__display)
+			right_paddle.draw(self.__display)
 			ball.draw(self.__display)
 			grid_button.draw(self.__display)
 			train_button.draw(self.__display)
 			render_button.draw(self.__display)
 
 			# display trian terminate count when in training
-			text_surface = font_consola.render(f'Trian count: {trian_terminate_count}', True, (255, 255, 255))
+			# left side
+			left_text_surface = font_consola.render(f'Train count: {left_train_terminate_count}', True, (255, 255, 255))
 			topleft_panel = game_panel.get_rect().topleft
 			padding_x = 10
-			padding_y = text_surface.get_size()[1] + 20
-			self.__display.blit(text_surface, (topleft_panel[0]+padding_x, topleft_panel[1]-padding_y))
+			padding_y = left_text_surface.get_size()[1] + 20
+			self.__display.blit(left_text_surface, (topleft_panel[0]+padding_x, topleft_panel[1]-padding_y))
+			# right side
+			right_text_surface = font_consola.render(f'Train count: {right_train_terminate_count}', True, (255, 255, 255))
+			topright_panel = game_panel.get_rect().topright
+			padding_x = 10
+			padding_y = right_text_surface.get_size()[1] + 20
+			self.__display.blit(left_text_surface, (topright_panel[0]-padding_x, topright_panel[1]-padding_y))
+
+			left_setting.draw(self.__display)
+			right_setting.draw(self.__display)
 
 		pygame.display.update()

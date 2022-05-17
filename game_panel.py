@@ -11,7 +11,7 @@ class GamePanel:
 		self.__background_color = background_color
 		self.__grid_color = grid_color
 		self.__grid_enable = grid_enable
-		self.__terminal_state = ['left']
+		self.__terminal_state = ['left', 'right']
 
 	### setter --------------------------------------------------------------------------------
 	def set_center(self, center_point):
@@ -46,6 +46,10 @@ class GamePanel:
 			position = (self.__rect.bottomleft[0], self.__rect.bottomleft[1]+20)
 		elif side == 'train_button':
 			position = (self.__rect.midtop[0], self.__rect.midtop[1]-20)
+		elif side == 'left_setting':
+			position = (self.__rect.midleft[0]-20, self.__rect.midleft[1])
+		elif side == 'right_setting':	
+			position = (self.__rect.midright[0]+20, self.__rect.midright[1])
 		else:
 			position = self.__rect.center
 		return position
@@ -72,7 +76,7 @@ class GamePanel:
 	def get_state(self, ball, paddle):
 		ball_position = self.get_block_position(ball.get_center())
 		paddle_position = self.get_block_position(paddle.get_center())
-		state_key = f'{ball_position[0]:02d}-{ball_position[1]:02d}_{paddle_position[1]:02d}'
+		state_key = f'{ball_position[0]:04d}-{ball_position[1]:04d}_{paddle_position[1]:04d}'
 		# print(state_key)
 		return state_key
 

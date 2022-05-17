@@ -18,6 +18,9 @@ class Button:
 		return self.__is_active
 
 	### setter ----------------------------------------------------------------------------------
+	def set_is_active(self, is_active):
+		self.__is_active = is_active
+
 	def set_midtop(self, midtop):
 		self.__rect.midtop = midtop
 
