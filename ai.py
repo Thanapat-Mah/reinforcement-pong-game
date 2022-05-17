@@ -10,6 +10,8 @@ class AI:
 		self.__learning_coef = 0.8
 		self.__discount_factor = 0.8
 		self.__learn_count = 0
+		self.__hit_memory = []
+		self.__hit_rate = 0
 
 	### getter --------------------------------------------------------------
 	def get_states(self):
@@ -20,6 +22,13 @@ class AI:
 		for i in range(1, 4):
 			print(state_sample[-i], self.__q_table[state_sample[-i]])
 
+	def get_learn_count(self):
+		return self.__learn_count
+
+	def get_hit_rate(self):
+		return self.__hit_rate
+
+	### setter ---------------------------------------------------------------
 	def set_values(self, alpha, gamma):
 		self.__learning_coef = alpha
 		self.__discount_factor = gamma
@@ -31,6 +40,16 @@ class AI:
 		self.__q_table = dict()
 		self.__memory = dict()
 		self.__learn_count = 0
+		self.__hit_memory = []
+		self.__hit_rate = 0
+
+	def calculate_hit_rate(self):
+		if len(self.__hit_memory) != 0:
+			if len(self.__hit_memory) > 1000:
+				self.__hit_memory = self.__hit_memory[-1000:]
+			self.__hit_rate = 100*sum(self.__hit_memory)/len(self.__hit_memory)
+		else:
+			self.__hit_rate = 0
 
 	# select and perform action
 	# If best_util_ratio = 1, it always pick the best action
@@ -72,8 +91,10 @@ class AI:
 		state_utility = 0
 		if panel_collide_side == self.__terminal_side:
 			state_utility = -1
+			self.__hit_memory.append(0)
 		elif paddle_collide:
 			state_utility = 1
+			self.__hit_memory.append(1)
 		elif ball_position_in_danger:
 			state_utility = -0.5
 		r = self.__actions_cost[self.__memory['action']] + state_utility
@@ -91,6 +112,6 @@ class AI:
 		# update Q value
 		self.__q_table[old_state][action] = current_q + self.__learning_coef * (r + new_q_after_discount - current_q)
 
-		if panel_collide_side or paddle_collide:
+		if (panel_collide_side == self.__terminal_side) or paddle_collide:
 			self.__learn_count += 1
-		return self.__learn_count
+			self.calculate_hit_rate()

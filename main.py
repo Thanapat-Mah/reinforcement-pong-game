@@ -17,11 +17,13 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 	paddle_action_limit = 1
 	is_fast = False
 	is_rendering = True
-	left_learn_terminate_count = 0	
+	left_learn_terminate_count = 0
+	left_hit_rate = 0
 	left_current_state = game_panel.get_state(ball, left_paddle)
 	left_state = left_setting.get_state()
 	is_left_learn = left_setting.get_is_learn()
 	right_train_terminate_count = 0
+	right_hit_rate = 0
 	right_current_state = game_panel.get_state(ball, right_paddle)
 	right_state = right_setting.get_state()
 	is_right_learn = right_setting.get_is_learn()
@@ -109,22 +111,24 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 			right_new_state = game_panel.get_state(ball, right_paddle)
 			right_current_state = right_new_state
 		ball.update_position()
-		
-		
 
 		# learning from the previous action
 		if (left_state == 'AI') and is_left_learn:
 			left_ball_position_in_danger = ball.get_rect().left < left_paddle.get_left()
-			left_learn_terminate_count = left_ai.learn(panel_collide_side, left_paddle_collide, left_new_state, left_ball_position_in_danger)
+			left_ai.learn(panel_collide_side, left_paddle_collide, left_new_state, left_ball_position_in_danger)
+		left_learn_terminate_count = left_ai.get_learn_count()
+		left_hit_rate = left_ai.get_hit_rate()
 		if (right_state == 'AI') and is_right_learn:
 			right_ball_position_in_danger = ball.get_rect().right > right_paddle.get_right()
-			right_train_terminate_count = right_ai.learn(panel_collide_side, right_paddle_collide, right_new_state, right_ball_position_in_danger)
+			right_ai.learn(panel_collide_side, right_paddle_collide, right_new_state, right_ball_position_in_danger)
+		right_train_terminate_count = right_ai.get_learn_count()
+		right_hit_rate = right_ai.get_hit_rate()
 		if is_rendering:
 			screen.update_screen(game_panel, left_paddle, right_paddle, ball,
 				grid_button, render_button, random_ball_button, fast_button,
-				is_fast, left_learn_terminate_count, right_train_terminate_count, close_button, left_setting, right_setting)
+				is_fast, left_learn_terminate_count, right_train_terminate_count, close_button,
+				left_setting, right_setting, left_hit_rate, right_hit_rate)
 
-		# if (count%100000 == 0) and (count != 0): left_ai.get_states()
 	pygame.quit()
 	quit()
 

@@ -78,13 +78,11 @@ class SideSetting:
 				self.justify_state()
 				return self.__state
 		if self.__state == 'AI':
-			for setting, button in self.__ai_setting.items():
-				if button.check_click(event):
-					if setting == 'Learn':
-						return True
-					elif setting == 'Reset':
-						ai.reset()
-						return True
+			if self.__ai_setting['Learn'].check_click(event):
+				return 'Learn'
+			if self.__ai_setting['Reset'].check_click(event):
+				ai.reset()
+				return 'Reset'
 			for value_label, value_adjustor in self.__value_adjustors.items():
 				if value_adjustor.check_click(event):
 					return True
