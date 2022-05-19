@@ -18,7 +18,7 @@ class SideSetting:
 		}
 		self.__ai_setting = {
 			'Learn': Button(text='Learn', rect=[0, 0, 150, 40], active_color=(100, 200, 100)),
-			'Reset': Button(text='Reset', text_color=(255, 100, 100), rect=[0, 0, 150, 40],
+			'Reset': Button(text='Reset', text_color=(200, 0, 0), rect=[0, 0, 150, 40],
 				active_color=(100, 100, 100), passive_color=(100, 100, 100))
 		}
 		self.__ai_setting['Learn'].set_is_active(False)

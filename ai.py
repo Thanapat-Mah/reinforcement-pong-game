@@ -12,6 +12,8 @@ class AI:
 		self.__learn_count = 0
 		self.__hit_memory = []
 		self.__hit_rate = 0
+		self.__first_converge = False
+		self.__toggle_first_converge = True
 
 	### getter --------------------------------------------------------------
 	def get_states(self):
@@ -28,6 +30,9 @@ class AI:
 	def get_hit_rate(self):
 		return self.__hit_rate
 
+	def get_first_converge(self):
+		return self.__first_converge
+
 	### setter ---------------------------------------------------------------
 	def set_values(self, alpha, gamma):
 		self.__learning_coef = alpha
@@ -36,20 +41,30 @@ class AI:
 	def init_util(self, state):
 		self.__q_table[state] = {action: 0 for action in self.__actions_cost}
 
+	def reset_first_converge(self):
+		self.__first_converge = False
+
 	def reset(self):
 		self.__q_table = dict()
 		self.__memory = dict()
 		self.__learn_count = 0
 		self.__hit_memory = []
 		self.__hit_rate = 0
+		self.__first_converge = False
+		self.__toggle_first_converge = True
 
 	def calculate_hit_rate(self):
-		if len(self.__hit_memory) != 0:
-			if len(self.__hit_memory) > 1000:
+		learn_count = len(self.__hit_memory)
+		if learn_count != 0:
+			if learn_count > 1000:
 				self.__hit_memory = self.__hit_memory[-1000:]
-			self.__hit_rate = 100*sum(self.__hit_memory)/len(self.__hit_memory)
+				learn_count = 1000
+			self.__hit_rate = 100*sum(self.__hit_memory)/learn_count
 		else:
 			self.__hit_rate = 0
+		if (self.__hit_rate == 100.0) and self.__toggle_first_converge and learn_count >= 1000:
+			self.__first_converge = True
+			self.__toggle_first_converge = False
 
 	# select and perform action
 	# If best_util_ratio = 1, it always pick the best action

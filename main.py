@@ -12,7 +12,9 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 	left_setting, right_setting):
 	run = True
 	clock_main = pygame.time.Clock()
-	fps = 10	# overall fps limit
+	high_fps = 10000
+	low_fps = 20
+	fps = low_fps	# overall fps limit
 	paddle_action_count = 0
 	paddle_action_limit = 1
 	is_fast = False
@@ -42,9 +44,9 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 			elif fast_button.check_click(event):
 				is_fast = fast_button.get_is_active()
 				if is_fast:
-					fps = 10000
+					fps = high_fps
 				else:
-					fps = 20
+					fps = low_fps
 			elif render_button.check_click(event):
 				is_rendering = render_button.get_is_active()
 				if not is_rendering:
@@ -113,14 +115,29 @@ def play_game(screen, game_panel, left_paddle, right_paddle, ball, left_ai, righ
 		ball.update_position()
 
 		# learning from the previous action
+		# when learning AI reach 100% hit rate, force enable rendering and close fast simulate
 		if (left_state == 'AI') and is_left_learn:
 			left_ball_position_in_danger = ball.get_rect().left < left_paddle.get_left()
 			left_ai.learn(panel_collide_side, left_paddle_collide, left_new_state, left_ball_position_in_danger)
+			if left_ai.get_first_converge():
+				render_button.set_is_active(True)
+				is_rendering = True
+				fast_button.set_is_active(False)
+				is_fast = False
+				fps = low_fps
+				left_ai.reset_first_converge()
 		left_learn_terminate_count = left_ai.get_learn_count()
 		left_hit_rate = left_ai.get_hit_rate()
 		if (right_state == 'AI') and is_right_learn:
 			right_ball_position_in_danger = ball.get_rect().right > right_paddle.get_right()
 			right_ai.learn(panel_collide_side, right_paddle_collide, right_new_state, right_ball_position_in_danger)
+			if right_ai.get_first_converge():
+				render_button.set_is_active(True)
+				is_rendering = True
+				fast_button.set_is_active(False)
+				is_fast = False
+				fps = low_fps
+				right_ai.reset_first_converge()
 		right_train_terminate_count = right_ai.get_learn_count()
 		right_hit_rate = right_ai.get_hit_rate()
 		if is_rendering:
