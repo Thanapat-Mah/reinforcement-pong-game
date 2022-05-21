@@ -144,10 +144,12 @@ class GamePanel:
 		for col in range(1, self.__block_count[0]):
 			pygame.draw.line(display, self.__grid_color,
 				(left+col*self.__block_size, top),
-				(left+col*self.__block_size, bottom))
+				(left+col*self.__block_size, bottom),
+				3)
 
 		# draw horizontal grid
 		for row in range(1, self.__block_count[1]):
 			pygame.draw.line(display, self.__grid_color,
 				(left, top+row*self.__block_size),
-				(right, top+row*self.__block_size))
+				(right, top+row*self.__block_size),
+				3)
